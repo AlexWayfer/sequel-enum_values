@@ -7,7 +7,7 @@ A Sequel plugin that provides `enum_values(field)` method to your models.
 [![Gem Version](https://badge.fury.io/rb/sequel-enum_values.svg)](https://badge.fury.io/rb/sequel-enum_values)
 [![Build Status](https://travis-ci.org/AlexWayfer/sequel-enum_values.svg?branch=master)](https://travis-ci.org/AlexWayfer/sequel-enum_values)
 [![codecov](https://codecov.io/gh/AlexWayfer/sequel-enum_values/branch/master/graph/badge.svg)](https://codecov.io/gh/AlexWayfer/sequel-enum_values)
-[![Maintainability](https://api.codeclimate.com/v1/badges/67143521dcfcf854b40f/maintainability)](https://codeclimate.com/github/AlexWayfer/sequel-enum_values/maintainability)
+[![Maintainability](https://api.codeclimate.com/v1/badges/dcde0eb5b943ee909a01/maintainability)](https://codeclimate.com/github/AlexWayfer/sequel-enum_values/maintainability)
 [![Dependency Status](https://gemnasium.com/badges/github.com/AlexWayfer/sequel-enum_values.svg)](https://gemnasium.com/github.com/AlexWayfer/sequel-enum_values)
 
 ## Installation

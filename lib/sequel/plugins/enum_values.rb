@@ -6,6 +6,9 @@ module Sequel
 		module EnumValues
 			VERSION = '1.0.0'
 
+			## Initialize model state for this plugin
+			## @param model [Sequel::Model] model for which plugin applying
+			## @param _options [Hash] options (don't affect anything in this moment)
 			def self.apply(model, _options = {})
 				model.instance_exec do
 					@cache = {}
@@ -13,6 +16,21 @@ module Sequel
 				end
 			end
 
+			## Configure model for this plugin
+			## @param model [Sequel::Model] model in which plugin enabled
+			## @param options [Hash] options for plugin
+			## @option options [Boolean] caching (true) cache enum values
+			## @option options [Boolean, Symbol, Array<Symbol>]
+			##   predicate_methods (false)
+			##   enum fields for which predicate methods will be defined
+			## @example Disable caching
+			##   Item.plugin :enum_values, caching: false
+			## @example Define predicate methods for all enum fields
+			##   Item.plugin :enum_values, predicate_methods: true
+			## @example Define predicate methods for specific enum fields
+			##   Item.plugin :enum_values, predicate_methods: %[status type]
+			## @example Define predicate methods for specific enum field
+			##   Item.plugin :enum_values, predicate_methods: :status
 			def self.configure(model, options = {})
 				model.instance_exec do
 					@caching = options.fetch(:caching, @caching)
@@ -30,6 +48,11 @@ module Sequel
 
 			## Module for class methods
 			module ClassMethods
+				## Get enum values for specific field
+				## @param field [Symbol] name of enum field
+				## @return [Array<String>] values of enum
+				## @example Get enum values for `status` field of `Item` model
+				##   Item.enum_values(:status)
 				def enum_values(field)
 					if @caching && (cached_values = @cache[field])
 						return cached_values

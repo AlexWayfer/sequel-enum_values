@@ -1,8 +1,6 @@
 # frozen_string_literal: true
 
-require 'rake/testtask'
-Rake::TestTask.new(:spec) do |t|
-	t.pattern = %w[spec/**/spec_helper.rb spec/**/*_spec.rb]
-end
+require 'rspec/core/rake_task'
+RSpec::Core::RakeTask.new(:spec)
 
 task default: :spec

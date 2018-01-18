@@ -3,6 +3,7 @@
 connection = Sequel.connect('mock://postgres')
 
 ## https://github.com/jeremyevans/sequel/blob/e61fcf297eed92342cee6c5016c90874e8da1449/spec/extensions/pg_enum_spec.rb#L9-L19
+
 connection.extend(
 	Module.new do
 		def schema_parse_table(*)
@@ -41,18 +42,28 @@ end
 
 describe 'Sequel::Plugins::EnumValues' do
 	describe 'Sequel::Model.enum_values' do
-		it 'should return array of pg_enum values by field name' do
-			Item.enum_values(:type).should.equal %w[first second third]
+		subject { Item.enum_values(field) }
+
+		context 'existing :type field' do
+			let(:field) { :type }
+
+			it { is_expected.to eq %w[first second third] }
 		end
 
-		it 'should return array of pg_enum values by another field name' do
-			Item.enum_values(:status).should.equal %w[created selected canceled]
+		context 'existing :status field' do
+			let(:field) { :status }
+
+			it { is_expected.to eq %w[created selected canceled] }
 		end
 
-		it 'should raise ArgumentError if there is no such column' do
-			-> { Item.enum_values(:foo) }
-				.should.raise(ArgumentError)
-				.message.should.equal "'items' table does not have 'foo' column"
+		context 'nonexistent :foo field' do
+			let(:field) { :foo }
+
+			it do
+				expect { subject }.to raise_error(
+					ArgumentError, "'items' table does not have 'foo' column"
+				)
+			end
 		end
 	end
 end

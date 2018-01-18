@@ -16,8 +16,4 @@ require 'sequel/extensions/migration'
 
 require_relative File.join('..', 'lib', 'sequel', 'plugins', 'enum_values')
 
-require 'minitest/bacon'
-require 'minitest/reporters'
-Minitest::Reporters.use! [Minitest::Reporters::DefaultReporter.new]
-
 require 'pry-byebug'

@@ -2,6 +2,12 @@ language: ruby
 rvm:
   - 2.3
   - 2.4
+  - 2.5
+
+before_install:
+  - gem update --system
+
+cache: bundler
 
 notifications:
   email:

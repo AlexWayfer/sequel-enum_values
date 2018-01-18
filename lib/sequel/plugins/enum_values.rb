@@ -16,6 +16,15 @@ module Sequel
 			def self.configure(model, options = {})
 				model.instance_exec do
 					@caching = options.fetch(:caching, @caching)
+
+					predicate_methods = options.fetch(:predicate_methods, false)
+
+					transform_predicate_methods_to_enum_fields(predicate_methods)
+						.each do |field|
+							all_enum_fields[field][:enum_values].each do |enum_value|
+								define_predicate_method field, enum_value
+							end
+						end
 				end
 			end
 
@@ -26,7 +35,7 @@ module Sequel
 						return cached_values
 					end
 
-					field_schema = db.schema(table_name).to_h[field]
+					field_schema = all_enum_fields[field]
 					raise_field_nonexistent(field) if field_schema.nil?
 
 					enum_values = field_schema[:enum_values]
@@ -35,6 +44,30 @@ module Sequel
 				end
 
 				private
+
+				def transform_predicate_methods_to_enum_fields(predicate_methods)
+					case predicate_methods
+					when TrueClass
+						all_enum_fields.keys
+					when FalseClass
+						[]
+					else
+						Array(predicate_methods)
+					end
+				end
+
+				def define_predicate_method(field, enum_value)
+					define_method "#{enum_value}?" do
+						public_send(field) == enum_value
+					end
+				end
+
+				def all_enum_fields
+					return @all_enum_fields if @caching && defined? @all_enum_fields
+					@all_enum_fields =
+						db.schema(table_name).to_h
+							.select { |_field, schema| schema.key?(:enum_values) }
+				end
 
 				def raise_field_nonexistent(field)
 					raise(

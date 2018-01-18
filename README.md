@@ -74,6 +74,37 @@ But you can disable it:
 
 ```ruby
 Item.plugin :enum_values, caching: false
+```
+
+### Predicate methods
+
+Plugin can define instance methods for all enum values:
+
+```ruby
+Item.plugin :enum_values, predicate_methods: true # default is `false`
+
+item = Item.new(type: 'first', status: 'created')
+
+item.first? # => true
+item.second? # => false
+
+item.created? # => true
+item.selected? # => false
+````
+
+Or just for specific fields:
+
+```ruby
+Item.plugin :enum_values, predicate_methods: %i[status]
+# or just `:status` for single value
+
+item = Item.new(type: 'first', status: 'created')
+
+item.first? # => NoMethodError
+
+item.created? # => true
+item.selected? # => false
+````
 
 ## Contributing
 

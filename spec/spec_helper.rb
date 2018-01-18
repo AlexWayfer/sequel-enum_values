@@ -14,6 +14,6 @@ end
 require 'sequel'
 require 'sequel/extensions/migration'
 
-require_relative File.join('..', 'lib', 'sequel', 'plugins', 'enum_values')
+require_relative '../lib/sequel/plugins/enum_values'
 
 require 'pry-byebug'

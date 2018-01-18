@@ -66,6 +66,15 @@ Item.enum_values(:type) # => ["first", "second", "third"]
 Item.enum_values(:status) # => ["created", "selected", "canceled"]
 ```
 
+### Caching
+
+Plugin caches enum values for each field by default.
+
+But you can disable it:
+
+```ruby
+Item.plugin :enum_values, caching: false
+
 ## Contributing
 
 1.  Fork it

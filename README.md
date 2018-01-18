@@ -1,14 +1,14 @@
 # Sequel enum_values plugin
 
+[![Travis branch](https://img.shields.io/travis/AlexWayfer/sequel-enum_values/master.svg?style=flat-square)](https://travis-ci.org/AlexWayfer/sequel-enum_values)
+[![Codecov branch](https://img.shields.io/codecov/c/github/AlexWayfer/sequel-enum_values/master.svg?style=flat-square)](https://codecov.io/gh/AlexWayfer/sequel-enum_values)
+[![Code Climate](https://img.shields.io/codeclimate/maintainability/AlexWayfer/sequel-enum_values.svg?style=flat-square)](https://codeclimate.com/github/AlexWayfer/sequel-enum_values)
+[![Gemnasium](https://img.shields.io/gemnasium/AlexWayfer/sequel-enum_values.svg?style=flat-square)](https://gemnasium.com/github.com/AlexWayfer/sequel-enum_values)
+[![Inline docs](https://inch-ci.org/github/AlexWayfer/sequel-enum_values.svg?branch=master)](https://inch-ci.org/github/AlexWayfer/sequel-enum_values)
+[![Gem](https://img.shields.io/gem/v/sequel-enum_values.svg?style=flat-square)](https://rubygems.org/gems/sequel-enum_values)
+[![license](https://img.shields.io/github/license/AlexWayfer/sequel-enum_values.svg?style=flat-square)](https://github.com/AlexWayfer/sequel-enum_values/blob/master/LICENSE.txt)
+
 A Sequel plugin that provides `enum_values(field)` method to your models.
-
-## Status
-
-[![Gem Version](https://badge.fury.io/rb/sequel-enum_values.svg)](https://badge.fury.io/rb/sequel-enum_values)
-[![Build Status](https://travis-ci.org/AlexWayfer/sequel-enum_values.svg?branch=master)](https://travis-ci.org/AlexWayfer/sequel-enum_values)
-[![codecov](https://codecov.io/gh/AlexWayfer/sequel-enum_values/branch/master/graph/badge.svg)](https://codecov.io/gh/AlexWayfer/sequel-enum_values)
-[![Maintainability](https://api.codeclimate.com/v1/badges/dcde0eb5b943ee909a01/maintainability)](https://codeclimate.com/github/AlexWayfer/sequel-enum_values/maintainability)
-[![Dependency Status](https://gemnasium.com/badges/github.com/AlexWayfer/sequel-enum_values.svg)](https://gemnasium.com/github.com/AlexWayfer/sequel-enum_values)
 
 ## Installation
 

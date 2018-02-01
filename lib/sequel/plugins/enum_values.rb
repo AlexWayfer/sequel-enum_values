@@ -4,15 +4,15 @@ module Sequel
 	module Plugins
 		## Plugin for getting enum values from PostgreSQL by field name
 		module EnumValues
-			VERSION = '1.2.0'
+			VERSION = '1.2.1'
 
 			## Initialize model state for this plugin
 			## @param model [Sequel::Model] model for which plugin applying
 			## @param _options [Hash] options (don't affect anything in this moment)
 			def self.apply(model, _options = {})
 				model.instance_exec do
-					@cache = {}
-					@caching = true
+					@enum_values_cache = {}
+					@enum_values_caching = true
 				end
 			end
 
@@ -33,7 +33,7 @@ module Sequel
 			##   Item.plugin :enum_values, predicate_methods: :status
 			def self.configure(model, options = {})
 				model.instance_exec do
-					@caching = options.fetch(:caching, @caching)
+					@enum_values_caching = options.fetch(:caching, @enum_values_caching)
 
 					predicate_methods = options.fetch(:predicate_methods, false)
 
@@ -54,7 +54,7 @@ module Sequel
 				## @example Get enum values for `status` field of `Item` model
 				##   Item.enum_values(:status)
 				def enum_values(field)
-					if @caching && (cached_values = @cache[field])
+					if @enum_values_caching && (cached_values = @enum_values_cache[field])
 						return cached_values
 					end
 
@@ -62,7 +62,7 @@ module Sequel
 					raise_field_nonexistent(field) if field_schema.nil?
 
 					enum_values = field_schema[:enum_values]
-					@cache[field] = enum_values if @caching
+					@enum_values_cache[field] = enum_values if @enum_values_caching
 					enum_values
 				end
 
@@ -86,7 +86,9 @@ module Sequel
 				end
 
 				def all_enum_fields
-					return @all_enum_fields if @caching && defined? @all_enum_fields
+					if @enum_values_caching && defined?(@all_enum_fields)
+						return @all_enum_fields
+					end
 					@all_enum_fields =
 						db.schema(table_name).to_h
 							.select { |_field, schema| schema.key?(:enum_values) }

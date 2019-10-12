@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require_relative 'lib/sequel/plugins/enum_values'
+require_relative 'lib/sequel/plugins/enum_values/version'
 
 Gem::Specification.new do |s|
 	s.name        = 'sequel-enum_values'

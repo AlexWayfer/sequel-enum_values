@@ -1,11 +1,11 @@
 # frozen_string_literal: true
 
+require_relative 'enum_values/version'
+
 module Sequel
 	module Plugins
 		## Plugin for getting enum values from PostgreSQL by field name
 		module EnumValues
-			VERSION = '1.2.1'
-
 			## Initialize model state for this plugin
 			## @param model [Sequel::Model] model for which plugin applying
 			## @param _options [Hash] options (don't affect anything in this moment)

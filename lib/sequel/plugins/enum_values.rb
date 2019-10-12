@@ -89,6 +89,7 @@ module Sequel
 					if @enum_values_caching && defined?(@all_enum_fields)
 						return @all_enum_fields
 					end
+
 					@all_enum_fields =
 						db.schema(table_name).to_h
 							.select { |_field, schema| schema.key?(:enum_values) }

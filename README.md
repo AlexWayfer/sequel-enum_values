@@ -1,9 +1,9 @@
 # Sequel enum_values plugin
 
-[![Travis branch](https://img.shields.io/travis/AlexWayfer/sequel-enum_values/master.svg?style=flat-square)](https://travis-ci.org/AlexWayfer/sequel-enum_values)
+![Cirrus CI - Base Branch Build Status](https://img.shields.io/cirrus/github/AlexWayfer/sequel-enum_values?style=flat-square)
 [![Codecov branch](https://img.shields.io/codecov/c/github/AlexWayfer/sequel-enum_values/master.svg?style=flat-square)](https://codecov.io/gh/AlexWayfer/sequel-enum_values)
 [![Code Climate](https://img.shields.io/codeclimate/maintainability/AlexWayfer/sequel-enum_values.svg?style=flat-square)](https://codeclimate.com/github/AlexWayfer/sequel-enum_values)
-[![Gemnasium](https://img.shields.io/gemnasium/AlexWayfer/sequel-enum_values.svg?style=flat-square)](https://gemnasium.com/github.com/AlexWayfer/sequel-enum_values)
+![Depfu](https://img.shields.io/depfu/AlexWayfer/sequel-enum_values?style=flat-square)
 [![Inline docs](https://inch-ci.org/github/AlexWayfer/sequel-enum_values.svg?branch=master)](https://inch-ci.org/github/AlexWayfer/sequel-enum_values)
 [![Gem](https://img.shields.io/gem/v/sequel-enum_values.svg?style=flat-square)](https://rubygems.org/gems/sequel-enum_values)
 [![license](https://img.shields.io/github/license/AlexWayfer/sequel-enum_values.svg?style=flat-square)](https://github.com/AlexWayfer/sequel-enum_values/blob/master/LICENSE.txt)

@@ -124,46 +124,74 @@ describe 'Sequel::Plugins::EnumValues' do
 				ITEM_ENUM_PREDICATE_METHODS =
 					convert_enum_values_to_predicate_methods.call ITEM_ENUM_VALUES
 
-				subject { item_class.instance_methods(false) }
+				subject { item_class.new.public_send(predicate_method_name) }
+
+				shared_examples(
+					'for all enum predicate methods'
+				) do |predicate_method_names, *expectations|
+					predicate_method_names.each do |predicate_method_name|
+						describe predicate_method_name do
+							let(:predicate_method_name) { predicate_method_name }
+
+							it do
+								expectations.each { |expectation| instance_exec(&expectation) }
+							end
+						end
+					end
+				end
 
 				context 'by default' do
-					it "doesn't define methods" do
-						is_expected.not_to include(*ITEM_ENUM_PREDICATE_METHODS)
-					end
+					include_examples 'for all enum predicate methods',
+						ITEM_ENUM_PREDICATE_METHODS,
+						-> { expect { subject }.to raise_error(NoMethodError) }
 				end
 
 				context 'with true value' do
-					it 'defines methods for all enum values' do
+					before do
 						item_class.plugin :enum_values, predicate_methods: true
-
-						is_expected.to include(*ITEM_ENUM_PREDICATE_METHODS)
 					end
+
+					include_examples 'for all enum predicate methods',
+						ITEM_ENUM_PREDICATE_METHODS,
+						-> { is_expected.to be false }
 				end
 
 				context 'with false value' do
-					it "doesn't define methods" do
+					before do
 						item_class.plugin :enum_values, predicate_methods: false
-
-						is_expected.not_to include(*ITEM_ENUM_PREDICATE_METHODS)
 					end
+
+					include_examples 'for all enum predicate methods',
+						ITEM_ENUM_PREDICATE_METHODS,
+						-> { expect { subject }.to raise_error(NoMethodError) }
 				end
 
 				context 'with Array value' do
-					it 'defines methods for fields from Array' do
+					before do
 						item_class.plugin :enum_values, predicate_methods: %i[status]
-
-						is_expected.to include(*STATUS_ENUM_PREDICATE_METHODS)
-						is_expected.not_to include(*TYPE_ENUM_PREDICATE_METHODS)
 					end
+
+					include_examples 'for all enum predicate methods',
+						STATUS_ENUM_PREDICATE_METHODS,
+						-> { is_expected.to be false }
+
+					include_examples 'for all enum predicate methods',
+						TYPE_ENUM_PREDICATE_METHODS,
+						-> { expect { subject }.to raise_error(NoMethodError) }
 				end
 
 				context 'with Symbol value' do
-					it 'defines methods for specific field' do
+					before do
 						item_class.plugin :enum_values, predicate_methods: :status
-
-						is_expected.to include(*STATUS_ENUM_PREDICATE_METHODS)
-						is_expected.not_to include(*TYPE_ENUM_PREDICATE_METHODS)
 					end
+
+					include_examples 'for all enum predicate methods',
+						STATUS_ENUM_PREDICATE_METHODS,
+						-> { is_expected.to be false }
+
+					include_examples 'for all enum predicate methods',
+						TYPE_ENUM_PREDICATE_METHODS,
+						-> { expect { subject }.to raise_error(NoMethodError) }
 				end
 			end
 		end

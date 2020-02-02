@@ -8,7 +8,7 @@ Layout/AlignArguments:
   EnforcedStyle: with_fixed_indentation
 
 AllCops:
-  TargetRubyVersion: 2.3
+  TargetRubyVersion: 2.4
 
 Metrics/BlockLength:
   Exclude:

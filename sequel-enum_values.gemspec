@@ -16,6 +16,8 @@ Gem::Specification.new do |s|
 	s.homepage    = 'https://github.com/AlexWayfer/sequel-enum_values'
 	s.license     = 'MIT'
 
+	s.required_ruby_version = '>= 2.4.0'
+
 	s.add_runtime_dependency 'sequel', '>= 4.1.0', '<= 6'
 
 	s.add_development_dependency 'codecov', '~> 0.1.15'

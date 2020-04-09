@@ -1,35 +1,37 @@
 # frozen_string_literal:true
 
-describe 'Sequel::Plugins::EnumValues' do
-	TYPE_ENUM_VALUES = %w[first second third].freeze
-	STATUS_ENUM_VALUES = %w[created selected canceled].freeze
-	ITEM_ENUM_VALUES = (TYPE_ENUM_VALUES + STATUS_ENUM_VALUES).freeze
+describe Sequel::Plugins::EnumValues do
+	type_enum_values = %w[first second third]
+	status_enum_values = %w[created selected canceled]
+	item_enum_values = type_enum_values + status_enum_values
 
-	let!(:connection) do
-		connection = Sequel.connect('mock://postgres')
+	let(:connection) { Sequel.connect('mock://postgres') }
 
+	let(:item_class) do
+		Class.new(Sequel::Model(:items)) do
+			plugin :enum_values
+		end
+	end
+
+	before do
 		## https://github.com/jeremyevans/sequel/blob/e61fcf297eed92342cee6c5016c90874e8da1449/spec/extensions/pg_enum_spec.rb#L9-L19
 
-		connection.extend(
-			Module.new do
-				def schema_parse_table(*)
-					[
-						[:items,  { oid: 1 }],
-						[:type,   { enum_values: TYPE_ENUM_VALUES }],
-						[:status, { enum_values: STATUS_ENUM_VALUES }]
-					]
-				end
+		connection.define_singleton_method :schema_parse_table do |*|
+			[
+				[:items,  { oid: 1 }],
+				[:type,   { enum_values: type_enum_values }],
+				[:status, { enum_values: status_enum_values }]
+			]
+		end
 
-				# def _metadata_dataset
-				# 	super.with_fetch(
-				# 		[
-				# 			%w[first second third].map { |value| { v: 1, enumlabel: value } },
-				# 			[{ typname: 'item_type', v: 212_389 }]
-				# 		]
-				# 	)
-				# end
-			end
-		)
+		# connection.define_singleton_method :_metadata_dataset do |*args|
+		# 	super.with_fetch(
+		# 		[
+		# 			%w[first second third].map { |value| { v: 1, enumlabel: value } },
+		# 			[{ typname: 'item_type', v: 212_389 }]
+		# 		]
+		# 	)
+		# end
 
 		# connection.extension :pg_enum
 		#
@@ -41,36 +43,28 @@ describe 'Sequel::Plugins::EnumValues' do
 		# 	column :type, :item_type
 		# 	column :status, :item_status
 		# end
-
-		connection
-	end
-
-	let(:item_class) do
-		Class.new(Sequel::Model(:items)) do
-			plugin :enum_values
-		end
 	end
 
 	describe 'Sequel::Model.enum_values' do
-		subject { item_class.enum_values(field) }
+		subject(:enum_values) { item_class.enum_values(field) }
 
-		context 'existing :type field' do
+		context 'with existing :type field' do
 			let(:field) { :type }
 
-			it { is_expected.to eq TYPE_ENUM_VALUES }
+			it { is_expected.to eq type_enum_values }
 		end
 
-		context 'existing :status field' do
+		context 'with existing :status field' do
 			let(:field) { :status }
 
-			it { is_expected.to eq STATUS_ENUM_VALUES }
+			it { is_expected.to eq status_enum_values }
 		end
 
-		context 'nonexistent :foo field' do
+		context 'with nonexistent :foo field' do
 			let(:field) { :foo }
 
 			it do
-				expect { subject }.to raise_error(
+				expect { enum_values }.to raise_error(
 					ArgumentError, "'items' table does not have 'foo' column"
 				)
 			end
@@ -78,37 +72,76 @@ describe 'Sequel::Plugins::EnumValues' do
 
 		describe '.configure' do
 			describe 'caching option' do
-				it 'caches by default' do
-					expect(item_class.db).to receive(:schema).and_call_original.once
-					expect(item_class).to receive(:all_enum_fields).and_call_original.once
-					5.times { item_class.enum_values(:type) }
+				shared_examples 'works correctly' do
+					before do
+						allow(item_class).to receive(:all_enum_fields).and_call_original
+						allow(item_class.db).to receive(:schema).and_call_original
+
+						subject
+					end
+
+					it do
+						expect(item_class).to have_received(:all_enum_fields)
+							.exactly(all_enum_fields_received_times).times
+					end
+
+					it do
+						expect(item_class.db).to have_received(:schema)
+							.exactly(schema_received_times).times
+					end
 				end
 
-				it 'caches with true value' do
-					item_class.plugin :enum_values, caching: true
+				describe 'caches by default' do
+					subject do
+						5.times { item_class.enum_values(:type) }
+					end
 
-					expect(item_class.db).to receive(:schema).and_call_original.once
-					expect(item_class).to receive(:all_enum_fields).and_call_original.once
-					5.times { item_class.enum_values(:type) }
+					let(:all_enum_fields_received_times) { 1 }
+					let(:schema_received_times) { 1 }
+
+					include_examples 'works correctly'
 				end
 
-				it "doesn't cache with false value" do
-					item_class.plugin :enum_values, caching: false
+				describe 'caches with true value' do
+					subject do
+						5.times { item_class.enum_values(:type) }
+					end
 
-					expect(item_class.db).to receive(:schema).and_call_original
-						.exactly(5).times
-					expect(item_class).to receive(:all_enum_fields).and_call_original
-						.exactly(5).times
-					5.times { item_class.enum_values(:type) }
+					before do
+						item_class.plugin :enum_values, caching: true
+					end
+
+					let(:all_enum_fields_received_times) { 1 }
+					let(:schema_received_times) { 1 }
+
+					include_examples 'works correctly'
 				end
 
-				it 'caches fields separately' do
-					expect(item_class.db).to receive(:schema).and_call_original
-						.once
-					expect(item_class).to receive(:all_enum_fields).and_call_original
-						.twice
-					5.times { item_class.enum_values(:type) }
-					5.times { item_class.enum_values(:status) }
+				describe "doesn't cache with false value" do
+					subject do
+						5.times { item_class.enum_values(:type) }
+					end
+
+					before do
+						item_class.plugin :enum_values, caching: false
+					end
+
+					let(:all_enum_fields_received_times) { 5 }
+					let(:schema_received_times) { 5 }
+
+					include_examples 'works correctly'
+				end
+
+				describe 'caches fields separately' do
+					subject do
+						5.times { item_class.enum_values(:type) }
+						5.times { item_class.enum_values(:status) }
+					end
+
+					let(:all_enum_fields_received_times) { 2 }
+					let(:schema_received_times) { 1 }
+
+					include_examples 'works correctly'
 				end
 			end
 
@@ -117,32 +150,32 @@ describe 'Sequel::Plugins::EnumValues' do
 					enum_values.map { |enum_value| :"#{enum_value}?" }
 				end
 
-				STATUS_ENUM_PREDICATE_METHODS =
-					convert_enum_values_to_predicate_methods.call STATUS_ENUM_VALUES
-				TYPE_ENUM_PREDICATE_METHODS =
-					convert_enum_values_to_predicate_methods.call TYPE_ENUM_VALUES
-				ITEM_ENUM_PREDICATE_METHODS =
-					convert_enum_values_to_predicate_methods.call ITEM_ENUM_VALUES
-
-				subject { item_class.new.public_send(predicate_method_name) }
+				status_enum_predicate_methods =
+					convert_enum_values_to_predicate_methods.call status_enum_values
+				type_enum_predicate_methods =
+					convert_enum_values_to_predicate_methods.call type_enum_values
+				item_enum_predicate_methods =
+					convert_enum_values_to_predicate_methods.call item_enum_values
 
 				shared_examples(
 					'for all enum predicate methods'
 				) do |predicate_method_names, *expectations|
 					predicate_method_names.each do |predicate_method_name|
 						describe predicate_method_name do
-							let(:predicate_method_name) { predicate_method_name }
+							subject { item_class.new.public_send(predicate_method_name) }
 
 							it do
-								expectations.each { |expectation| instance_exec(&expectation) }
+								Array(expectations).each do |expectation|
+									instance_exec(&expectation)
+								end
 							end
 						end
 					end
 				end
 
-				context 'by default' do
+				context 'with default' do
 					include_examples 'for all enum predicate methods',
-						ITEM_ENUM_PREDICATE_METHODS,
+						item_enum_predicate_methods,
 						-> { expect { subject }.to raise_error(NoMethodError) }
 				end
 
@@ -152,8 +185,8 @@ describe 'Sequel::Plugins::EnumValues' do
 					end
 
 					include_examples 'for all enum predicate methods',
-						ITEM_ENUM_PREDICATE_METHODS,
-						-> { is_expected.to be false }
+						item_enum_predicate_methods,
+						-> { expect(subject).to be false }
 				end
 
 				context 'with false value' do
@@ -162,7 +195,7 @@ describe 'Sequel::Plugins::EnumValues' do
 					end
 
 					include_examples 'for all enum predicate methods',
-						ITEM_ENUM_PREDICATE_METHODS,
+						item_enum_predicate_methods,
 						-> { expect { subject }.to raise_error(NoMethodError) }
 				end
 
@@ -172,11 +205,11 @@ describe 'Sequel::Plugins::EnumValues' do
 					end
 
 					include_examples 'for all enum predicate methods',
-						STATUS_ENUM_PREDICATE_METHODS,
-						-> { is_expected.to be false }
+						status_enum_predicate_methods,
+						-> { expect(subject).to be false }
 
 					include_examples 'for all enum predicate methods',
-						TYPE_ENUM_PREDICATE_METHODS,
+						type_enum_predicate_methods,
 						-> { expect { subject }.to raise_error(NoMethodError) }
 				end
 
@@ -186,11 +219,11 @@ describe 'Sequel::Plugins::EnumValues' do
 					end
 
 					include_examples 'for all enum predicate methods',
-						STATUS_ENUM_PREDICATE_METHODS,
-						-> { is_expected.to be false }
+						status_enum_predicate_methods,
+						-> { expect(subject).to be false }
 
 					include_examples 'for all enum predicate methods',
-						TYPE_ENUM_PREDICATE_METHODS,
+						type_enum_predicate_methods,
 						-> { expect { subject }.to raise_error(NoMethodError) }
 				end
 			end

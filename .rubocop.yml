@@ -11,6 +11,11 @@ Layout/MultilineMethodCallIndentation:
 Layout/ArgumentAlignment:
   EnforcedStyle: with_fixed_indentation
 
+Lint/RaiseException:
+  Enabled: true
+Lint/StructNewOverride:
+  Enabled: true
+
 Style/HashEachMethods:
   Enabled: true
 Style/HashTransformKeys:

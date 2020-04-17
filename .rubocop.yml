@@ -2,14 +2,16 @@ require:
   - rubocop-performance
   - rubocop-rspec
 
-Layout/Tab:
-  Enabled: false
+Layout/IndentationStyle:
+  EnforcedStyle: tabs
 Layout/IndentationWidth:
   Width: 1
 Layout/MultilineMethodCallIndentation:
   EnforcedStyle: indented
 Layout/ArgumentAlignment:
   EnforcedStyle: with_fixed_indentation
+Layout/SpaceAroundMethodCallOperator:
+  Enabled: true
 
 Lint/RaiseException:
   Enabled: true
@@ -21,6 +23,8 @@ Style/HashEachMethods:
 Style/HashTransformKeys:
   Enabled: true
 Style/HashTransformValues:
+  Enabled: true
+Style/ExponentialNotation:
   Enabled: true
 
 AllCops:

@@ -6,10 +6,13 @@ Gem::Specification.new do |s|
 	s.name        = 'sequel-enum_values'
 	s.version     = Sequel::Plugins::EnumValues::VERSION
 
-	s.summary     = 'Sequel plugin that provides method' \
-	                ' for getting `pg_enum` values'
-	s.description = 'Now your `Sequel::Model` classes has method' \
-	                ' for getting `pg_enum` values from DataBase by field name.'
+	s.summary     = <<~TEXT
+		Sequel plugin that provides method for getting `pg_enum` values
+	TEXT
+
+	s.description = <<~TEXT
+		Now your `Sequel::Model` classes has method for getting `pg_enum` values from DataBase by field name.
+	TEXT
 
 	s.authors     = ['Alexander Popov']
 	s.email       = ['alex.wayfer@gmail.com']

@@ -86,9 +86,7 @@ module Sequel
 				end
 
 				def all_enum_fields
-					if @enum_values_caching && defined?(@all_enum_fields)
-						return @all_enum_fields
-					end
+					return @all_enum_fields if @enum_values_caching && defined?(@all_enum_fields)
 
 					@all_enum_fields =
 						db.schema(table_name).to_h

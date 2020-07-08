@@ -12,39 +12,10 @@ Layout/MultilineMethodCallIndentation:
   EnforcedStyle: indented
 Layout/ArgumentAlignment:
   EnforcedStyle: with_fixed_indentation
-Layout/SpaceAroundMethodCallOperator:
-  Enabled: true
-Layout/EmptyLinesAroundAttributeAccessor:
-  Enabled: true
-
-Lint/RaiseException:
-  Enabled: true
-Lint/StructNewOverride:
-  Enabled: true
-Lint/DeprecatedOpenSSLConstant:
-  Enabled: true
-Lint/MixedRegexpCaptureTypes:
-  Enabled: true
-
-Style/HashEachMethods:
-  Enabled: true
-Style/HashTransformKeys:
-  Enabled: true
-Style/HashTransformValues:
-  Enabled: true
-Style/ExponentialNotation:
-  Enabled: true
-Style/RedundantFetchBlock:
-  Enabled: true
-Style/RedundantRegexpCharacterClass:
-  Enabled: true
-Style/RedundantRegexpEscape:
-  Enabled: true
-Style/SlicingWithRange:
-  Enabled: true
 
 AllCops:
   TargetRubyVersion: 2.4
+  NewCops: enable
 
 Metrics/BlockLength:
   Exclude:

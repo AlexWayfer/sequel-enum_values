@@ -23,7 +23,7 @@ Gem::Specification.new do |s|
 
 	s.add_runtime_dependency 'sequel', '>= 4.1.0', '<= 6'
 
-	s.add_development_dependency 'codecov', '~> 0.1.15'
+	s.add_development_dependency 'codecov', '~> 0.1.15', '< 0.1.18'
 	s.add_development_dependency 'pry-byebug', '~> 3.5'
 	s.add_development_dependency 'rack-test', '~> 1.1'
 	s.add_development_dependency 'rake', '~> 13.0'

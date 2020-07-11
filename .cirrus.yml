@@ -2,14 +2,45 @@ bundle_cache: &bundle_cache
   bundle_cache:
     folder: /usr/local/bundle
     fingerprint_script:
-      - echo $CIRRUS_TASK_NAME:$CIRRUS_OS
+      - echo $CIRRUS_OS
       - ruby -v
       - cat Gemfile
       - cat *.gemspec
-    populate_script: bundle update
+  install_script:
+    - gem install bundler
+    - bundle update
 
+remark_task:
+  container:
+    image: node
+  node_modules_cache:
+    folder: node_modules
+    fingerprint_script:
+      - echo $CIRRUS_OS
+      - node -v
+      - cat package.json
+  install_script: npm install
+  lint_script: npm run remark
+  only_if: ($CIRRUS_BRANCH == 'master') ||
+    changesInclude(
+      '.cirrus.yml', '.gitignore', 'package.json', '.remarkrc.yaml', '**.md'
+    )
 
-test_task:
+rubocop_task:
+  container:
+    image: ruby:latest
+  <<: *bundle_cache
+  lint_script: toys rubocop
+  only_if: ($CIRRUS_BRANCH == 'master') ||
+    changesInclude(
+      '.cirrus.yml', '.gitignore', 'Gemfile', 'Rakefile', '.rubocop.yml', '*.gemspec',
+      '**.rb', '**.ru'
+    )
+
+rspec_task:
+  depends_on:
+    - remark
+    - rubocop
   container:
     matrix:
       image: ruby:2.4
@@ -19,10 +50,9 @@ test_task:
   <<: *bundle_cache
   environment:
     CODECOV_TOKEN: ENCRYPTED[64e5f0046db773b1410165947fe5b33ef121a4181c60173ac6abc1e12354913e4dc7d41dec24b972b04022a42462f247]
-  test_script: bundle exec rake spec
-
-rubocop_task:
-  container:
-    image: ruby:2.7
-  <<: *bundle_cache
-  rubocop_script: bundle exec rubocop
+  test_script: toys rspec
+  only_if: ($CIRRUS_BRANCH == 'master') ||
+    changesInclude(
+      '.cirrus.yml', '.gitignore', 'Gemfile', 'Rakefile', '.rspec', '*.gemspec', 'lib/**',
+      'spec/**'
+    )

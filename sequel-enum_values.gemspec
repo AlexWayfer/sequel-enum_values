@@ -2,36 +2,50 @@
 
 require_relative 'lib/sequel/plugins/enum_values/version'
 
-Gem::Specification.new do |s|
-	s.name        = 'sequel-enum_values'
-	s.version     = Sequel::Plugins::EnumValues::VERSION
+Gem::Specification.new do |spec|
+	spec.name        = 'sequel-enum_values'
+	spec.version     = Sequel::Plugins::EnumValues::VERSION
 
-	s.summary     = <<~TEXT
+	spec.summary     = <<~TEXT
 		Sequel plugin that provides method for getting `pg_enum` values
 	TEXT
 
-	s.description = <<~TEXT
+	spec.description = <<~TEXT
 		Now your `Sequel::Model` classes has method for getting `pg_enum` values from DataBase by field name.
 	TEXT
 
-	s.authors     = ['Alexander Popov']
-	s.email       = ['alex.wayfer@gmail.com']
-	s.homepage    = 'https://github.com/AlexWayfer/sequel-enum_values'
-	s.license     = 'MIT'
+	spec.authors     = ['Alexander Popov']
+	spec.email       = ['alex.wayfer@gmail.com']
+	spec.license     = 'MIT'
 
-	s.required_ruby_version = '>= 2.4.0'
+	source_code_uri = 'https://github.com/AlexWayfer/sequel-enum_values'
 
-	s.add_runtime_dependency 'sequel', '>= 4.1.0', '<= 6'
+	spec.homepage = source_code_uri
 
-	s.add_development_dependency 'codecov', '~> 0.1.15', '!= 0.1.18', '!= 0.1.19'
-	s.add_development_dependency 'pry-byebug', '~> 3.5'
-	s.add_development_dependency 'rack-test', '~> 1.1'
-	s.add_development_dependency 'rake', '~> 13.0'
-	s.add_development_dependency 'rspec', '~> 3.7'
-	s.add_development_dependency 'rubocop', '~> 0.87.0'
-	s.add_development_dependency 'rubocop-performance', '~> 1.5'
-	s.add_development_dependency 'rubocop-rspec', '~> 1.38'
-	s.add_development_dependency 'simplecov', '~> 0.18.1'
+	spec.metadata['source_code_uri'] = source_code_uri
 
-	s.files = Dir[File.join('lib', '**', '*')]
+	spec.metadata['homepage_uri'] = spec.homepage
+
+	spec.metadata['changelog_uri'] =
+		'https://github.com/AlexWayfer/sequel-enum_values/blob/master/CHANGELOG.md'
+
+	spec.files = Dir['lib/**/*.rb', 'README.md', 'LICENSE.txt', 'CHANGELOG.md']
+
+	spec.required_ruby_version = '>= 2.4.0'
+
+	spec.add_runtime_dependency 'sequel', '>= 4.1.0', '<= 6'
+
+	spec.add_development_dependency 'pry-byebug', '~> 3.9'
+
+	spec.add_development_dependency 'bundler', '~> 2.0'
+	spec.add_development_dependency 'gem_toys', '~> 0.3.0'
+	spec.add_development_dependency 'toys', '~> 0.10.4'
+
+	spec.add_development_dependency 'codecov', '~> 0.2.0'
+	spec.add_development_dependency 'rspec', '~> 3.9'
+	spec.add_development_dependency 'simplecov', '~> 0.18.0'
+
+	spec.add_development_dependency 'rubocop', '~> 0.87.0'
+	spec.add_development_dependency 'rubocop-performance', '~> 1.0'
+	spec.add_development_dependency 'rubocop-rspec', '~> 1.0'
 end

@@ -1,9 +1,9 @@
 # Sequel enum_values plugin
 
-![Cirrus CI - Base Branch Build Status](https://img.shields.io/cirrus/github/AlexWayfer/sequel-enum_values?style=flat-square)
+[![Cirrus CI - Base Branch Build Status](https://img.shields.io/cirrus/github/AlexWayfer/sequel-enum_values?style=flat-square)](https://cirrus-ci.com/github/AlexWayfer/sequel-enum_values)
 [![Codecov branch](https://img.shields.io/codecov/c/github/AlexWayfer/sequel-enum_values/master.svg?style=flat-square)](https://codecov.io/gh/AlexWayfer/sequel-enum_values)
 [![Code Climate](https://img.shields.io/codeclimate/maintainability/AlexWayfer/sequel-enum_values.svg?style=flat-square)](https://codeclimate.com/github/AlexWayfer/sequel-enum_values)
-![Depfu](https://img.shields.io/depfu/AlexWayfer/sequel-enum_values?style=flat-square)
+[![Depfu](https://img.shields.io/depfu/AlexWayfer/sequel-enum_values?style=flat-square)](https://depfu.com/repos/github/AlexWayfer/sequel-enum_values)
 [![Inline docs](https://inch-ci.org/github/AlexWayfer/sequel-enum_values.svg?branch=master)](https://inch-ci.org/github/AlexWayfer/sequel-enum_values)
 [![Gem](https://img.shields.io/gem/v/sequel-enum_values.svg?style=flat-square)](https://rubygems.org/gems/sequel-enum_values)
 [![license](https://img.shields.io/github/license/AlexWayfer/sequel-enum_values.svg?style=flat-square)](https://github.com/AlexWayfer/sequel-enum_values/blob/master/LICENSE.txt)
@@ -90,7 +90,7 @@ item.second? # => false
 
 item.created? # => true
 item.selected? # => false
-````
+```
 
 Or just for specific fields:
 
@@ -104,12 +104,24 @@ item.first? # => NoMethodError
 
 item.created? # => true
 item.selected? # => false
-````
+```
+
+## Development
+
+After checking out the repo, run `bundle install` to install dependencies.
+
+Then, run `toys rspec` to run the tests.
+
+To install this gem onto your local machine, run `toys gem install`.
+
+To release a new version, run `toys gem release %version%`.
+See how it works [here](https://github.com/AlexWayfer/gem_toys#release).
 
 ## Contributing
 
-1.  Fork it
-2.  Create your feature branch
-3.  Commit your changes
-4.  Push to the branch
-5.  Create new Pull Request
+Bug reports and pull requests are welcome on [GitHub](https://github.com/AlexWayfer/sequel-enum_values).
+
+## License
+
+The gem is available as open source under the terms of the
+[MIT License](https://opensource.org/licenses/MIT).

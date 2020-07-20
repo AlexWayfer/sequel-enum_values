@@ -8,6 +8,10 @@ if ENV['CODECOV_TOKEN']
 	SimpleCov.formatter = SimpleCov::Formatter::Codecov
 end
 
+puts <<~DEBUG
+	TEST_VARIABLE == 'the-value-of-encrypted-variable' is #{ENV['TEST_VARIABLE'] == 'the-value-of-encrypted-variable'}
+DEBUG
+
 require 'sequel'
 require 'sequel/extensions/migration'
 

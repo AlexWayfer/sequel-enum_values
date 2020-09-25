@@ -6,7 +6,7 @@
 [![Depfu](https://img.shields.io/depfu/AlexWayfer/sequel-enum_values?style=flat-square)](https://depfu.com/repos/github/AlexWayfer/sequel-enum_values)
 [![Inline docs](https://inch-ci.org/github/AlexWayfer/sequel-enum_values.svg?branch=master)](https://inch-ci.org/github/AlexWayfer/sequel-enum_values)
 [![Gem](https://img.shields.io/gem/v/sequel-enum_values.svg?style=flat-square)](https://rubygems.org/gems/sequel-enum_values)
-[![license](https://img.shields.io/github/license/AlexWayfer/sequel-enum_values.svg?style=flat-square)](https://github.com/AlexWayfer/sequel-enum_values/blob/master/LICENSE.txt)
+[![License](https://img.shields.io/github/license/AlexWayfer/sequel-enum_values.svg?style=flat-square)](LICENSE.txt)
 
 A Sequel plugin that provides `enum_values(field)` method to your models.
 

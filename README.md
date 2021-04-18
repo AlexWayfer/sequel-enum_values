@@ -106,6 +106,34 @@ item.created? # => true
 item.selected? # => false
 ```
 
+### Filter methods
+
+Plugin can define dataset methods for all enum values:
+
+```ruby
+Item.plugin :enum_values, filter_methods: true # default is `false`
+
+Item.dataset.one # => #<Sequel::Dataset: "SELECT * FROM \"items\" WHERE (\"type\" = 'one')">
+Item.dataset.another # => #<Sequel::Dataset: "SELECT * FROM \"items\" WHERE (\"type\" = 'another')">
+
+Item.dataset.created # => #<Sequel::Dataset: "SELECT * FROM \"items\" WHERE (\"status\" = 'created')">
+Item.dataset.selected # => #<Sequel::Dataset: "SELECT * FROM \"items\" WHERE (\"status\" = 'selected')">
+```
+
+Or just for specific fields:
+
+```ruby
+Item.plugin :enum_values, filter_methods: %i[status]
+# or just `:status` for single value
+
+item = Item.new(type: 'one', status: 'created')
+
+Item.dataset.one # => NoMethodError
+
+Item.dataset.created # => #<Sequel::Dataset: "SELECT * FROM \"items\" WHERE (\"status\" = 'created')">
+Item.dataset.selected # => #<Sequel::Dataset: "SELECT * FROM \"items\" WHERE (\"status\" = 'selected')">
+```
+
 ## Development
 
 After checking out the repo, run `bundle install` to install dependencies.

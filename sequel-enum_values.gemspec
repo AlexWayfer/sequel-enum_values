@@ -18,16 +18,19 @@ Gem::Specification.new do |spec|
 	spec.email       = ['alex.wayfer@gmail.com']
 	spec.license     = 'MIT'
 
-	source_code_uri = 'https://github.com/AlexWayfer/sequel-enum_values'
+	github_uri = "https://github.com/AlexWayfer/#{spec.name}"
 
-	spec.homepage = source_code_uri
+	spec.homepage = github_uri
 
-	spec.metadata['source_code_uri'] = source_code_uri
-
-	spec.metadata['homepage_uri'] = spec.homepage
-
-	spec.metadata['changelog_uri'] =
-		'https://github.com/AlexWayfer/sequel-enum_values/blob/master/CHANGELOG.md'
+	spec.metadata = {
+		'bug_tracker_uri' => "#{github_uri}/issues",
+		'changelog_uri' => "#{github_uri}/blob/v#{spec.version}/CHANGELOG.md",
+		'documentation_uri' => "http://www.rubydoc.info/gems/#{spec.name}/#{spec.version}",
+		'homepage_uri' => spec.homepage,
+		'rubygems_mfa_required' => 'true',
+		'source_code_uri' => github_uri,
+		'wiki_uri' => "#{github_uri}/wiki"
+	}
 
 	spec.files = Dir['lib/**/*.rb', 'README.md', 'LICENSE.txt', 'CHANGELOG.md']
 

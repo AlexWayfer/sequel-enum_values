@@ -1,10 +1,10 @@
 # Sequel enum_values plugin
 
 [![Cirrus CI - Base Branch Build Status](https://img.shields.io/cirrus/github/AlexWayfer/sequel-enum_values?style=flat-square)](https://cirrus-ci.com/github/AlexWayfer/sequel-enum_values)
-[![Codecov branch](https://img.shields.io/codecov/c/github/AlexWayfer/sequel-enum_values/master.svg?style=flat-square)](https://codecov.io/gh/AlexWayfer/sequel-enum_values)
+[![Codecov branch](https://img.shields.io/codecov/c/github/AlexWayfer/sequel-enum_values/main.svg?style=flat-square)](https://codecov.io/gh/AlexWayfer/sequel-enum_values)
 [![Code Climate](https://img.shields.io/codeclimate/maintainability/AlexWayfer/sequel-enum_values.svg?style=flat-square)](https://codeclimate.com/github/AlexWayfer/sequel-enum_values)
 [![Depfu](https://img.shields.io/depfu/AlexWayfer/sequel-enum_values?style=flat-square)](https://depfu.com/repos/github/AlexWayfer/sequel-enum_values)
-[![Inline docs](https://inch-ci.org/github/AlexWayfer/sequel-enum_values.svg?branch=master)](https://inch-ci.org/github/AlexWayfer/sequel-enum_values)
+[![Inline docs](https://inch-ci.org/github/AlexWayfer/sequel-enum_values.svg?branch=main)](https://inch-ci.org/github/AlexWayfer/sequel-enum_values)
 [![Gem](https://img.shields.io/gem/v/sequel-enum_values.svg?style=flat-square)](https://rubygems.org/gems/sequel-enum_values)
 [![License](https://img.shields.io/github/license/AlexWayfer/sequel-enum_values.svg?style=flat-square)](LICENSE.txt)
 

@@ -1,6 +1,6 @@
 # Changelog
 
-## master (unreleased)
+## Unreleased
 
 *   Rename internal instance variables.
     Avoid the conflict with [`static_cache` Sequel's plugin](http://sequel.jeremyevans.net/rdoc-plugins/classes/Sequel/Plugins/StaticCache.html)

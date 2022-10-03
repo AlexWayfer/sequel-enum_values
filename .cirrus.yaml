@@ -44,12 +44,26 @@ rspec_task:
       image: ruby:2.7
       image: ruby:3.0
       image: ruby:3.1
+
   <<: *bundle_cache
+
   environment:
-    CODECOV_TOKEN: ENCRYPTED[64e5f0046db773b1410165947fe5b33ef121a4181c60173ac6abc1e12354913e4dc7d41dec24b972b04022a42462f247]
     TEST_VARIABLE:
       ENCRYPTED[6c43322962ee5dc76a82a0bac04df2b526f50ed3222dd3fed39cde69e38d7606abade8b34f336a791f1ae1767e29bf11]
+
   test_script: bundle exec rspec
+
+  codecov_uploader_cache:
+    folder: codecov
+    fingerprint_script:
+      - curl --no-progress-meter https://uploader.codecov.io/latest/linux/codecov.SHA256SUM
+    populate_script:
+      - mkdir -p codecov
+      - curl https://uploader.codecov.io/latest/linux/codecov -o codecov/uploader
+      - chmod +x codecov/uploader
+
+  codecov_script: codecov/uploader
+
   only_if: ($CIRRUS_BRANCH == 'main') ||
     changesInclude(
       '.cirrus.yaml', '.gitignore', 'Gemfile', 'Rakefile', '.rspec', '*.gemspec', 'lib/**',

@@ -1,12 +1,13 @@
 # frozen_string_literal: true
 
 require 'simplecov'
-SimpleCov.start
 
-if ENV['CODECOV_TOKEN']
-	require 'codecov'
-	SimpleCov.formatter = SimpleCov::Formatter::Codecov
+if ENV['CI']
+	require 'simplecov-cobertura'
+	SimpleCov.formatter = SimpleCov::Formatter::CoberturaFormatter
 end
+
+SimpleCov.start
 
 puts <<~DEBUG
 	TEST_VARIABLE == 'the-value-of-encrypted-variable' is #{ENV['TEST_VARIABLE'] == 'the-value-of-encrypted-variable'}

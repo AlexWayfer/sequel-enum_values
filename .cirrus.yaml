@@ -47,10 +47,6 @@ rspec_task:
 
   <<: *bundle_cache
 
-  environment:
-    TEST_VARIABLE:
-      ENCRYPTED[6c43322962ee5dc76a82a0bac04df2b526f50ed3222dd3fed39cde69e38d7606abade8b34f336a791f1ae1767e29bf11]
-
   test_script: bundle exec rspec
 
   codecov_uploader_cache:

@@ -9,10 +9,6 @@ end
 
 SimpleCov.start
 
-puts <<~DEBUG
-	TEST_VARIABLE == 'the-value-of-encrypted-variable' is #{ENV['TEST_VARIABLE'] == 'the-value-of-encrypted-variable'}
-DEBUG
-
 require 'sequel'
 require 'sequel/extensions/migration'
 

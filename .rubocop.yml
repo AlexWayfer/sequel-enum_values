@@ -40,3 +40,6 @@ Metrics/BlockLength:
 
 RSpec/NestedGroups:
   Max: 5
+## https://github.com/rubocop/rubocop-rspec/issues/1385
+RSpec/NoExpectationExample:
+  Enabled: false

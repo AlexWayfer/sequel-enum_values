@@ -164,7 +164,7 @@ describe Sequel::Plugins::EnumValues do
 						describe predicate_method_name do
 							subject { item_class.new.public_send(predicate_method_name) }
 
-							it do
+							specify do
 								Array(expectations).each do |expectation|
 									instance_exec(&expectation)
 								end

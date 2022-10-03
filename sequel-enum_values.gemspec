@@ -36,7 +36,7 @@ Gem::Specification.new do |spec|
 
 	spec.required_ruby_version = '>= 2.6', '< 4'
 
-	spec.add_runtime_dependency 'sequel', '>= 4.1.0', '<= 6'
+	spec.add_runtime_dependency 'sequel', '5.61.0'
 
 	spec.add_development_dependency 'pry-byebug', '~> 3.9'
 

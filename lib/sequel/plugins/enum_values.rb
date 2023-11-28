@@ -23,6 +23,9 @@ module Sequel
 			## @option options [Boolean, Symbol, Array<Symbol>]
 			##   predicate_methods (false)
 			##   enum fields for which predicate methods will be defined
+			## @option options [Boolean, Symbol, Array<Symbol>]
+			##   filter_methods (false)
+			##   enum fields for which dataset filter methods will be defined
 			## @example Disable caching
 			##   Item.plugin :enum_values, caching: false
 			## @example Define predicate methods for all enum fields
@@ -31,18 +34,17 @@ module Sequel
 			##   Item.plugin :enum_values, predicate_methods: %[status type]
 			## @example Define predicate methods for specific enum field
 			##   Item.plugin :enum_values, predicate_methods: :status
+			## @example Define filter methods for all enum fields
+			##   Item.plugin :enum_values, filter_methods: true
+			## @example Define filter methods for specific enum field
+			##   Item.plugin :enum_values, filter_methods: :status
+			## @example Define filter methods for specific enum fields
+			##   Item.plugin :enum_values, filter_methods: %[status type]
 			def self.configure(model, options = {})
 				model.instance_exec do
-					@enum_values_caching = options.fetch(:caching, @enum_values_caching)
+					@enum_values_options = options
 
-					predicate_methods = options.fetch(:predicate_methods, false)
-
-					transform_predicate_methods_to_enum_fields(predicate_methods)
-						.each do |field|
-							all_enum_fields[field][:enum_values].each do |enum_value|
-								define_predicate_method field, enum_value
-							end
-						end
+					process_enum_values_options
 				end
 			end
 
@@ -68,20 +70,30 @@ module Sequel
 
 				private
 
-				def transform_predicate_methods_to_enum_fields(predicate_methods)
-					case predicate_methods
-					when TrueClass
-						all_enum_fields.keys
-					when FalseClass
-						[]
-					else
-						Array(predicate_methods)
+				def process_enum_values_options
+					@enum_values_caching =
+						@enum_values_options.fetch(:caching, @enum_values_caching)
+
+					process_enum_values_option(:filter_methods) do |field, value|
+						dataset.methods.include?(value.to_sym) &&
+							warn("WARNING: Redefining method #{value}")
+
+						dataset_module { where value, field => value }
+					end
+
+					process_enum_values_option(:predicate_methods) do |field, value|
+						define_method("#{value}?", -> { public_send(field) == value })
 					end
 				end
 
-				def define_predicate_method(field, enum_value)
-					define_method "#{enum_value}?" do
-						public_send(field) == enum_value
+				def process_enum_values_option(key)
+					return unless (option = @enum_values_options[key])
+
+					enum_fields = all_enum_fields
+					enum_fields = enum_fields.slice(*option) unless option == true
+
+					enum_fields.each do |field, field_schema|
+						field_schema[:enum_values].each { |value| yield field, value }
 					end
 				end
 

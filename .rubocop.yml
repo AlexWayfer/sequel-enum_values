@@ -30,7 +30,7 @@ Layout/MultilineHashBraceLayout:
   EnforcedStyle: new_line
 
 AllCops:
-  TargetRubyVersion: 2.7
+  TargetRubyVersion: 3.0
   NewCops: enable
 
 Metrics/BlockLength:

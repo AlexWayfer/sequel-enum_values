@@ -80,7 +80,7 @@ module Sequel
 				end
 
 				def define_predicate_method(field, enum_value)
-					define_method "#{enum_value}?" do
+					define_method :"#{enum_value}?" do
 						public_send(field) == enum_value
 					end
 				end

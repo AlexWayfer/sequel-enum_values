@@ -72,7 +72,7 @@ describe Sequel::Plugins::EnumValues do
 
 		describe '.configure' do
 			describe 'caching option' do
-				shared_examples 'works correctly' do
+				shared_examples 'cached correctly' do
 					before do
 						allow(item_class).to receive(:all_enum_fields).and_call_original
 						allow(item_class.db).to receive(:schema).and_call_original
@@ -99,7 +99,7 @@ describe Sequel::Plugins::EnumValues do
 					let(:all_enum_fields_received_times) { 1 }
 					let(:schema_received_times) { 1 }
 
-					include_examples 'works correctly'
+					it_behaves_like 'cached correctly'
 				end
 
 				describe 'caches with true value' do
@@ -114,7 +114,7 @@ describe Sequel::Plugins::EnumValues do
 					let(:all_enum_fields_received_times) { 1 }
 					let(:schema_received_times) { 1 }
 
-					include_examples 'works correctly'
+					it_behaves_like 'cached correctly'
 				end
 
 				describe "doesn't cache with false value" do
@@ -129,7 +129,7 @@ describe Sequel::Plugins::EnumValues do
 					let(:all_enum_fields_received_times) { 5 }
 					let(:schema_received_times) { 5 }
 
-					include_examples 'works correctly'
+					it_behaves_like 'cached correctly'
 				end
 
 				describe 'caches fields separately' do
@@ -141,7 +141,7 @@ describe Sequel::Plugins::EnumValues do
 					let(:all_enum_fields_received_times) { 2 }
 					let(:schema_received_times) { 1 }
 
-					include_examples 'works correctly'
+					it_behaves_like 'cached correctly'
 				end
 			end
 
@@ -158,7 +158,7 @@ describe Sequel::Plugins::EnumValues do
 					convert_enum_values_to_predicate_methods.call item_enum_values
 
 				shared_examples(
-					'for all enum predicate methods'
+					'correct definition of predicate methods'
 				) do |predicate_method_names, *expectations|
 					predicate_method_names.each do |predicate_method_name|
 						describe predicate_method_name do
@@ -174,7 +174,7 @@ describe Sequel::Plugins::EnumValues do
 				end
 
 				context 'with default' do
-					include_examples 'for all enum predicate methods',
+					it_behaves_like 'correct definition of predicate methods',
 						item_enum_predicate_methods,
 						-> { expect { subject }.to raise_error(NoMethodError) }
 				end
@@ -184,7 +184,7 @@ describe Sequel::Plugins::EnumValues do
 						item_class.plugin :enum_values, predicate_methods: true
 					end
 
-					include_examples 'for all enum predicate methods',
+					it_behaves_like 'correct definition of predicate methods',
 						item_enum_predicate_methods,
 						-> { expect(subject).to be false }
 				end
@@ -194,7 +194,7 @@ describe Sequel::Plugins::EnumValues do
 						item_class.plugin :enum_values, predicate_methods: false
 					end
 
-					include_examples 'for all enum predicate methods',
+					it_behaves_like 'correct definition of predicate methods',
 						item_enum_predicate_methods,
 						-> { expect { subject }.to raise_error(NoMethodError) }
 				end
@@ -204,11 +204,11 @@ describe Sequel::Plugins::EnumValues do
 						item_class.plugin :enum_values, predicate_methods: %i[status]
 					end
 
-					include_examples 'for all enum predicate methods',
+					it_behaves_like 'correct definition of predicate methods',
 						status_enum_predicate_methods,
 						-> { expect(subject).to be false }
 
-					include_examples 'for all enum predicate methods',
+					it_behaves_like 'correct definition of predicate methods',
 						type_enum_predicate_methods,
 						-> { expect { subject }.to raise_error(NoMethodError) }
 				end
@@ -218,11 +218,11 @@ describe Sequel::Plugins::EnumValues do
 						item_class.plugin :enum_values, predicate_methods: :status
 					end
 
-					include_examples 'for all enum predicate methods',
+					it_behaves_like 'correct definition of predicate methods',
 						status_enum_predicate_methods,
 						-> { expect(subject).to be false }
 
-					include_examples 'for all enum predicate methods',
+					it_behaves_like 'correct definition of predicate methods',
 						type_enum_predicate_methods,
 						-> { expect { subject }.to raise_error(NoMethodError) }
 				end

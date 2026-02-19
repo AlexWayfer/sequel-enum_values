@@ -34,7 +34,7 @@ Gem::Specification.new do |spec|
 
 	spec.files = Dir['lib/**/*.rb', 'README.md', 'LICENSE.txt', 'CHANGELOG.md']
 
-	spec.required_ruby_version = '>= 3.2', '< 4'
+	spec.required_ruby_version = '>= 3.2', '< 5'
 
 	spec.add_dependency 'sequel', '~> 5.0'
 end

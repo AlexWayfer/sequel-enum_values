@@ -1,9 +1,9 @@
 # frozen_string_literal:true
 
 describe Sequel::Plugins::EnumValues do
-	type_enum_values = %w[first second third]
-	status_enum_values = %w[created selected canceled]
-	item_enum_values = type_enum_values + status_enum_values
+	let(:type_enum_values) { %w[first second third] }
+	let(:status_enum_values) { %w[created selected canceled] }
+	let(:item_enum_values) { type_enum_values + status_enum_values }
 
 	let(:connection) { Sequel.connect('mock://postgres') }
 
@@ -16,6 +16,8 @@ describe Sequel::Plugins::EnumValues do
 	before do
 		## https://github.com/jeremyevans/sequel/blob/e61fcf297eed92342cee6c5016c90874e8da1449/spec/extensions/pg_enum_spec.rb#L9-L19
 
+		type_enum_values = self.type_enum_values
+		status_enum_values = self.status_enum_values
 		connection.define_singleton_method :schema_parse_table do |*|
 			[
 				[:items,  { oid: 1 }],
@@ -146,37 +148,46 @@ describe Sequel::Plugins::EnumValues do
 			end
 
 			describe 'predicate_methods option' do
-				convert_enum_values_to_predicate_methods = lambda do |enum_values|
+				def convert_enum_values_to_predicate_methods(enum_values)
 					enum_values.map { |enum_value| :"#{enum_value}?" }
 				end
 
-				status_enum_predicate_methods =
-					convert_enum_values_to_predicate_methods.call status_enum_values
-				type_enum_predicate_methods =
-					convert_enum_values_to_predicate_methods.call type_enum_values
-				item_enum_predicate_methods =
-					convert_enum_values_to_predicate_methods.call item_enum_values
+				let(:status_enum_predicate_methods) do
+					convert_enum_values_to_predicate_methods status_enum_values
+				end
 
-				shared_examples(
-					'correct definition of predicate methods'
-				) do |predicate_method_names, *expectations|
-					predicate_method_names.each do |predicate_method_name|
-						describe predicate_method_name do
-							subject { item_class.new.public_send(predicate_method_name) }
+				let(:type_enum_predicate_methods) do
+					convert_enum_values_to_predicate_methods type_enum_values
+				end
 
-							specify do
-								Array(expectations).each do |expectation|
-									instance_exec(&expectation)
-								end
-							end
+				let(:item_enum_predicate_methods) do
+					convert_enum_values_to_predicate_methods item_enum_values
+				end
+
+				shared_examples 'defining predicate methods' do
+					let(:item) { item_class.new }
+
+					specify do
+						predicate_method_names.each do |predicate_method_name|
+							expect(item.public_send(predicate_method_name)).to be false
+						end
+					end
+				end
+
+				shared_examples 'not defining predicate methods' do
+					let(:item) { item_class.new }
+
+					specify do
+						predicate_method_names.each do |predicate_method_name|
+							expect { item.public_send(predicate_method_name) }.to raise_error(NoMethodError)
 						end
 					end
 				end
 
 				context 'with default' do
-					it_behaves_like 'correct definition of predicate methods',
-						item_enum_predicate_methods,
-						-> { expect { subject }.to raise_error(NoMethodError) }
+					it_behaves_like 'not defining predicate methods' do
+						let(:predicate_method_names) { item_enum_predicate_methods }
+					end
 				end
 
 				context 'with true value' do
@@ -184,9 +195,9 @@ describe Sequel::Plugins::EnumValues do
 						item_class.plugin :enum_values, predicate_methods: true
 					end
 
-					it_behaves_like 'correct definition of predicate methods',
-						item_enum_predicate_methods,
-						-> { expect(subject).to be false }
+					it_behaves_like 'defining predicate methods' do
+						let(:predicate_method_names) { item_enum_predicate_methods }
+					end
 				end
 
 				context 'with false value' do
@@ -194,9 +205,9 @@ describe Sequel::Plugins::EnumValues do
 						item_class.plugin :enum_values, predicate_methods: false
 					end
 
-					it_behaves_like 'correct definition of predicate methods',
-						item_enum_predicate_methods,
-						-> { expect { subject }.to raise_error(NoMethodError) }
+					it_behaves_like 'not defining predicate methods' do
+						let(:predicate_method_names) { item_enum_predicate_methods }
+					end
 				end
 
 				context 'with Array value' do
@@ -204,13 +215,13 @@ describe Sequel::Plugins::EnumValues do
 						item_class.plugin :enum_values, predicate_methods: %i[status]
 					end
 
-					it_behaves_like 'correct definition of predicate methods',
-						status_enum_predicate_methods,
-						-> { expect(subject).to be false }
+					it_behaves_like 'defining predicate methods' do
+						let(:predicate_method_names) { status_enum_predicate_methods }
+					end
 
-					it_behaves_like 'correct definition of predicate methods',
-						type_enum_predicate_methods,
-						-> { expect { subject }.to raise_error(NoMethodError) }
+					it_behaves_like 'not defining predicate methods' do
+						let(:predicate_method_names) { type_enum_predicate_methods }
+					end
 				end
 
 				context 'with Symbol value' do
@@ -218,13 +229,13 @@ describe Sequel::Plugins::EnumValues do
 						item_class.plugin :enum_values, predicate_methods: :status
 					end
 
-					it_behaves_like 'correct definition of predicate methods',
-						status_enum_predicate_methods,
-						-> { expect(subject).to be false }
+					it_behaves_like 'defining predicate methods' do
+						let(:predicate_method_names) { status_enum_predicate_methods }
+					end
 
-					it_behaves_like 'correct definition of predicate methods',
-						type_enum_predicate_methods,
-						-> { expect { subject }.to raise_error(NoMethodError) }
+					it_behaves_like 'not defining predicate methods' do
+						let(:predicate_method_names) { type_enum_predicate_methods }
+					end
 				end
 			end
 		end

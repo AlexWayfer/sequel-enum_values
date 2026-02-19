@@ -47,3 +47,6 @@ RSpec/NestedGroups:
 ## https://github.com/rubocop/rubocop-rspec/issues/1385
 RSpec/NoExpectationExample:
   Enabled: false
+## https://github.com/rubocop-hq/rubocop-rspec/pull/863/files#r471603667
+RSpec/MultipleMemoizedHelpers:
+  Enabled: false

@@ -2,13 +2,18 @@
 
 ## Unreleased
 
+## 2.0.0 (2026-02-19)
+
 *   Rename internal instance variables.
     Avoid the conflict with [`static_cache` Sequel's plugin](http://sequel.jeremyevans.net/rdoc-plugins/classes/Sequel/Plugins/StaticCache.html)
-*   Drop support for Ruby 2.3.
-*   Improve version locks of dependencies.
+*   Drop Ruby 2.3, 2.4, 2.5, 2.6, 2.7, 3.0 and 3.1 support.
+*   Add Ruby 3.2, 3.3, 3.4 and 4.0 support.
+*   Update `sequel` runtime dependency.
 *   Make tests coverage 100%.
-*   Switch from Travis CI to Cirrus CI.
-*   Update RuboCop, add `rubocop-performance` and `rubocop-rspec`, resolve offenses.
+*   Improve version locks of dependencies.
+*   Update development dependencies.
+*   Resolve new RuboCop offenses.
+*   Improve CI config.
 
 ## 1.2.0 (2018-02-01)
 

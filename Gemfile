@@ -17,8 +17,8 @@ end
 
 group :test do
 	gem 'rspec', '~> 3.9'
-	gem 'simplecov', '~> 0.22.0'
-	gem 'simplecov-cobertura', '~> 3.0'
+	gem 'simplecov', '~> 1.2.0'
+	gem 'simplecov-cobertura', '~> 4.0'
 end
 
 group :lint do
